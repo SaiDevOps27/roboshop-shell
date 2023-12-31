@@ -12,7 +12,7 @@ print_head "installing nodejs"
 yum install nodejs -y &>>${log_file}
 status_check $?
 
-print_head "create roboshop user"
+print_head "create roboshop cart"
 id roboshop
 if [ $? -ne 0 ]; then
 useradd roboshop &>>${log_file}
@@ -30,12 +30,12 @@ rm -rf /app/* &>>${log_file}
 status_check $?
 
 print_head "downloading app content"
-curl -o /tmp/user.zip https://roboshop-artifacts.s3.amazonaws.com/catalogue.zip &>>${log_file}
+curl -o /tmp/cart.zip https://roboshop-artifacts.s3.amazonaws.com/cart.zip &>>${log_file}
 cd /app
 status_check $?
 
 print_head "extracting app content"
-unzip /tmp/user.zip &>>${log_file}
+unzip /tmp/cart.zip &>>${log_file}
 status_check $?
 
 print_head "installing nodejs dependencies"
@@ -43,29 +43,18 @@ npm install &>>${log_file}
 status_check $?
 
 print_head "copying systemd service file"
-cp ${code_dir}/configs/user.service /etc/systemd/system/user.service &>>${log_file}
+cp ${code_dir}/configs/cart.service /etc/systemd/system/cart.service &>>${log_file}
 status_check $?
 
 print_head "reload systemd"
 systemctl daemon-reload &>>${log_file}
 status_check $?
 
-print_head "enable user service"
-systemctl enable catalogue &>>${log_file}
+print_head "enable cart service"
+systemctl enable cart &>>${log_file}
 status_check $?
 
-print_head "starting user service"
-systemctl start user &>>${log_file}
+print_head "starting cart service"
+systemctl restart cart &>>${log_file}
 status_check $?
 
-print_head "copying mongodb repo file"
-cp ${code_dir}/configs/mongodb.repo /etc/yum.repos.d/mongodb.repo &>>${log_file}
-status_check $?
-
-print_head "install mongo client"
-yum install mongodb-org-shell -y &>>${log_file}
-status_check $?
-
-print_head "load schema"
-mongo --host mongodb.devopsb.cloud </app/schema/user.js &>>${log_file}
-status_check $?
