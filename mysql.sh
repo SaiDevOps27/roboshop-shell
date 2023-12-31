@@ -12,7 +12,7 @@ dnf module disable mysql -y &>>${log_file}
 status_check $?
 
 print_head " copy mysql repo file "
-cp ${code_dir}/configs/mysql.repo /etc/yum.repo.d/mysql.repo &>>${log_file}
+cp ${code_dir}/configs/mysql.repo /etc/yum.repos.d/mysql.repo &>>${log_file}
 status_check $?
 
 print_head " installing mysql server "
