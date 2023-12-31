@@ -13,15 +13,15 @@ yum install nodejs -y &>>${log_file}
 status_check $?
 
 print_head "create roboshop user"
-id roboshop
+id roboshop &>>${log_file}
 if [ $? -ne 0 ]; then
-useradd roboshop &>>${log_file}
+  useradd roboshop &>>${log_file}
 fi
 status_check $?
 
 print_head "create application directory"
-if [ ! -ne 0 ]; then
-mkdir /app &>>${log_file}
+if [ ! -d /app ]; then
+  mkdir /app &>>${log_file}
 fi
 status_check $?
 
@@ -30,9 +30,9 @@ rm -rf /app/* &>>${log_file}
 status_check $?
 
 print_head "downloading app content"
-curl -o /tmp/user.zip https://roboshop-artifacts.s3.amazonaws.com/catalogue.zip &>>${log_file}
-cd /app
+curl -o /tmp/user.zip https://roboshop-artifacts.s3.amazonaws.com/user.zip &>>${log_file}
 status_check $?
+cd /app
 
 print_head "extracting app content"
 unzip /tmp/user.zip &>>${log_file}
@@ -51,11 +51,11 @@ systemctl daemon-reload &>>${log_file}
 status_check $?
 
 print_head "enable user service"
-systemctl enable catalogue &>>${log_file}
+systemctl enable user &>>${log_file}
 status_check $?
 
 print_head "starting user service"
-systemctl start user &>>${log_file}
+systemctl restart user &>>${log_file}
 status_check $?
 
 print_head "copying mongodb repo file"
