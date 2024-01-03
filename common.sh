@@ -47,7 +47,7 @@ schema_setup(){
     status_check $?
 
     print_head "load schema"
-    mongo --host mongodb.devopsb.cloud </app/schema/${component}.js &>>${log_file}
+    mongo --host mongodb-dev.devopsb.cloud </app/schema/${component}.js &>>${log_file}
     status_check $?
   elif [ "${schema_type}" == "mysql" ]; then
     print_head " install mysql client "
@@ -55,7 +55,7 @@ schema_setup(){
     status_check $?
 
     print_head " load schema "
-    mysql -h mysql.devopsb.cloud -uroot -p${mysql_root_password} < /app/schema/${component}.sql &>>${log_file}
+    mysql -h mysql-dev.devopsb.cloud -uroot -p${mysql_root_password} < /app/schema/${component}.sql &>>${log_file}
     status_check $?
   fi
 }
