@@ -1,6 +1,6 @@
 source common.sh
 
-print_head " Setting redis repo file "
+print_head " Installing redis repo file "
 dnf install https://rpms.remirepo.net/enterprise/remi-release-8.rpm -y &>>${log_file}
 status_check $?
 
